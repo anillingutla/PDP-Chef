@@ -8,8 +8,6 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import java.net.URL
 
-jenkins = Jenkins.instance
-
 def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
 def githubCredentials = "ford-github"
