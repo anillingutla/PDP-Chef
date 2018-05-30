@@ -34,6 +34,8 @@ pipeline {
     GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
     GIT_PROTOCOL = 'ssh://'
     GIT_COMMAND = 'delivery review'
+    
+    GROOVY_PATH ='/groovy'
   }
  
 //  parameters {
@@ -44,13 +46,16 @@ pipeline {
 
    stages {
 
- //      stage('\u2776 Checkout') {
- //       agent any
- //       steps {
- //            echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
- //            scm Checkout
- //         }//steps
- //      }//stage
+       stage('\u2776 Workspace') {
+        agent any
+        steps {
+              echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
+              def workspace = manager.build.getEnvVars()["WORKSPACE"]
+              env.WORKSPACE = pwd() // present working directory
+              echo " workspace - ${env.WORKSPACE}"
+          
+          }//steps
+       }//stage
     
        stage('\u2777 External Groovy') {
         agent any
