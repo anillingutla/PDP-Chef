@@ -37,12 +37,15 @@ pipeline {
    stages {
 
        stage('\u2774 Checkout') {
-          steps {
+        agent any
+        steps {
              echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
              scm Checkout
+            script {
         
-             def workspace = manager.build.getEnvVars()["WORKSPACE"]
-             echo "\u2600 workspace=${workspace}"
+                def workspace = manager.build.getEnvVars()["WORKSPACE"]
+                echo "\u2600 workspace=${workspace}"
+            }//script 
           }//steps
        }//stage
     
