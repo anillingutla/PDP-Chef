@@ -44,13 +44,13 @@ pipeline {
 
    stages {
 
-       stage('\u2776 Checkout') {
-        agent any
-        steps {
-             echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
-             scm Checkout
-          }//steps
-       }//stage
+ //      stage('\u2776 Checkout') {
+ //       agent any
+ //       steps {
+ //            echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
+ //            scm Checkout
+ //         }//steps
+ //      }//stage
     
        stage('\u2777 External Groovy') {
         agent any
