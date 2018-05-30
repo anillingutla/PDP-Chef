@@ -7,14 +7,9 @@ def githubSshCredentials = "chef-automate-ssh"
 
 //retrieve branch name
 tokens = "${env.JOB_NAME}".tokenize('/')
-org = tokens[0]
-repo = tokens[1]
-branch = tokens[2]
-echo 'account-org/repo/branch=' + org +'/'+ repo +'/'+ branch
-
-//get workspace being worked on
-def workspace = pwd()
-echo "\u2600 workspace=${workspace}"
+repo = tokens[0]
+branch = tokens[1]
+echo 'repo/branch=' + repo +'/'+ branch
 
 pipeline {
   agent any
@@ -41,6 +36,14 @@ pipeline {
 
    stages {
 
+       stage('\u2774 Checkout') {
+             echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
+             scm Checkout
+        
+             def workspace = manager.build.getEnvVars()["WORKSPACE"]
+             echo "\u2600 workspace=${workspace}"
+       }
+    
        stage('\u2775 External Groovy') {
         agent any
           steps {
