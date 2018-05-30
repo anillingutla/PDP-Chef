@@ -35,7 +35,7 @@ pipeline {
     GIT_PROTOCOL = 'ssh://'
     GIT_COMMAND = 'delivery review'
     
-    GROOVY_PATH ='/groovy'
+    GROOVY_PATH ='**/groovy'
   }
  
 //  parameters {
@@ -53,7 +53,6 @@ pipeline {
               script{
                     def manager = "my manager" // 
                     def workspace = manager.build.getEnvVars()["WORKSPACE"]
-                    env.WORKSPACE = pwd() // present working directory
                     echo " workspace - ${env.WORKSPACE}"
               }
           
@@ -66,12 +65,12 @@ pipeline {
            echo "Calling external Method groovy"
            script {
              // Load file from the current directory:
-               def externalMethod = load("externalMethod.groovy")
+               def externalMethod = load("**/groovy/externalMethod.groovy")
                externalMethod.lookAtThis("Steve")
 
                echo "Calling external Call groovy"
 
-               def externalCall = load("externalCall.groovy")
+               def externalCall = load("**/groovy/externalCall.groovy")
                externalCall("Steve")
            }
           }//steps
