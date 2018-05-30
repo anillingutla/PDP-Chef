@@ -28,15 +28,15 @@ pipeline {
     GIT_COMMAND = 'delivery review'
   }
  
-  parameters {
-    string(description: 'Please select an environment to promote to', name: 'env', defaultValue: 'qa')
-    string(description: 'Please select a cookbook to promote', name: 'cookbook', defaultValue: 'ford_windows')
-  }
+//  parameters {
+//    string(description: 'Please select an environment to promote to', name: 'env', defaultValue: 'qa')
+//    string(description: 'Please select a cookbook to promote', name: 'cookbook', defaultValue: 'ford_windows')
+//  }
  
 
    stages {
 
-       stage('\u2774 Checkout') {
+       stage('\u2776 Checkout') {
         agent any
         steps {
              echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
@@ -49,7 +49,7 @@ pipeline {
           }//steps
        }//stage
     
-       stage('\u2775 External Groovy') {
+       stage('\u2777 External Groovy') {
         agent any
           steps {
            echo "Calling external Method groovy"
@@ -66,7 +66,7 @@ pipeline {
           }//steps
         }//stage
 
-       stage('\u2776 clone') {
+       stage('\u2778 clone') {
           steps {
             echo "Cloning ${GIT_URL}"
  //              dir("ford_rdc_environments") {
@@ -77,7 +77,7 @@ pipeline {
           }//steps
         }//stage
 
-        stage('\u2777 modify') {
+        stage('\u2779 modify') {
           steps {
             echo "Modifying ${params.cookbook} in environments/${params.env}.json"
             sh 'ruby --version'
