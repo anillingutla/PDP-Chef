@@ -37,12 +37,14 @@ pipeline {
    stages {
 
        stage('\u2774 Checkout') {
+          steps {
              echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
              scm Checkout
         
              def workspace = manager.build.getEnvVars()["WORKSPACE"]
              echo "\u2600 workspace=${workspace}"
-       }
+          }//steps
+       }//stage
     
        stage('\u2775 External Groovy') {
         agent any
