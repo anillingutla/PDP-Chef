@@ -43,9 +43,13 @@ pipeline {
 
        stage('\u2775 External Groovy') {
           steps {
+           echo "Calling external Method groovy"
+           
            // Load file from the current directory:
              def externalMethod = load("externalMethod.groovy")
              externalMethod.lookAtThis("Steve")
+
+             echo "Calling external Call groovy"
 
              def externalCall = load("externalCall.groovy")
              externalCall("Steve")
