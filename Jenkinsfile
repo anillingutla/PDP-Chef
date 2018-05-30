@@ -38,53 +38,43 @@ pipeline {
     string(description: 'Please select a cookbook to promote', name: 'cookbook', defaultValue: 'ford_windows')
   }
  
- try {
-     stages {
 
-         stage('\u2775 External Groovy') {
-            steps {
-             // Load file from the current directory:
-               def externalMethod = load("externalMethod.groovy")
-               externalMethod.lookAtThis("Steve")
+   stages {
 
-               def externalCall = load("externalCall.groovy")
-               externalCall("Steve")
-            }
+       stage('\u2775 External Groovy') {
+          steps {
+           // Load file from the current directory:
+             def externalMethod = load("externalMethod.groovy")
+             externalMethod.lookAtThis("Steve")
+
+             def externalCall = load("externalCall.groovy")
+             externalCall("Steve")
           }
+        }
 
-         stage('\u2776 clone') {
-            steps {
-              echo "Cloning ${GIT_URL}"
-//              dir("ford_rdc_environments") {
-//                sshagent([githubSshCredentials]) {
-//                  git(url: "${GIT_PROTOCOL}${GIT_URL}", credentialsId: githubSshCredentials)
-//                }
-//              }
-            }
+       stage('\u2776 clone') {
+          steps {
+            echo "Cloning ${GIT_URL}"
+ //              dir("ford_rdc_environments") {
+ //                sshagent([githubSshCredentials]) {
+ //                  git(url: "${GIT_PROTOCOL}${GIT_URL}", credentialsId: githubSshCredentials)
+ //                }
+ //              }
           }
+        }
 
-          stage('\u2777 modify') {
-            steps {
-              echo "Modifying ${params.cookbook} in environments/${params.env}.json"
-              sh 'ruby --version'
-//             withCredentials([usernamePassword(credentialsId: chefAutomateCredentials, usernameVariable: 'AUTOMATE_USER', passwordVariable: 'AUTOMATE_PASSWORD')]) {
-//                withCredentials([usernamePassword(credentialsId: githubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) {
-//                  sshagent([githubSshCredentials]) {
-//                    sh "ruby main.rb ${params.env} ${params.cookbook} ford_rdc_environments"
-//                  }//sshagent
-//               }//withcredentials
-//              }//withcredentials
-            }//steps
-          }//stage
-     }//stages
- } catch (exc) {
-  /*
-  *
-  */
- } finally { 
-  /*
-  *
-  */  
- }
- 
+        stage('\u2777 modify') {
+          steps {
+            echo "Modifying ${params.cookbook} in environments/${params.env}.json"
+            sh 'ruby --version'
+ //             withCredentials([usernamePassword(credentialsId: chefAutomateCredentials, usernameVariable: 'AUTOMATE_USER', passwordVariable: 'AUTOMATE_PASSWORD')]) {
+ //                withCredentials([usernamePassword(credentialsId: githubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) {
+ //                  sshagent([githubSshCredentials]) {
+ //                    sh "ruby main.rb ${params.env} ${params.cookbook} ford_rdc_environments"
+ //                  }//sshagent
+ //               }//withcredentials
+ //              }//withcredentials
+          }//steps
+        }//stage
+   }//stages
 }//pipeline
