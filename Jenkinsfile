@@ -50,7 +50,9 @@ pipeline {
         agent any
         steps {
               echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
-              def workspace = manager.build.getEnvVars()["WORKSPACE"]
+              script{
+                  def workspace = manager.build.getEnvVars()["WORKSPACE"]
+              }
               env.WORKSPACE = pwd() // present working directory
               echo " workspace - ${env.WORKSPACE}"
           
