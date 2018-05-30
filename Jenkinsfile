@@ -39,9 +39,10 @@ pipeline {
   }
  
 
-   node {
+   stages {
 
        stage('\u2775 External Groovy') {
+        agent any
           steps {
            echo "Calling external Method groovy"
            script {
@@ -54,8 +55,8 @@ pipeline {
                def externalCall = load("externalCall.groovy")
                externalCall("Steve")
            }
-          }
-        }
+          }//steps
+        }//stage
 
        stage('\u2776 clone') {
           steps {
@@ -65,8 +66,8 @@ pipeline {
  //                  git(url: "${GIT_PROTOCOL}${GIT_URL}", credentialsId: githubSshCredentials)
  //                }
  //              }
-          }
-        }
+          }//steps
+        }//stage
 
         stage('\u2777 modify') {
           steps {
