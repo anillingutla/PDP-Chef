@@ -2,6 +2,8 @@
 
 import jenkins.model.*
 import hudson.model.*
+import jenkins.*
+import hudson.*
 
 def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
