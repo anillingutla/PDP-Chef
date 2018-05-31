@@ -1,12 +1,7 @@
-#!/bin/groovy
+#!/usr/bin/env groovy
 
 import jenkins.model.*
 import hudson.model.*
-import hudson.EnvVars
-import groovy.json.JsonSlurperClassic
-import groovy.json.JsonBuilder
-import groovy.json.JsonOutput
-import java.net.URL
 
 def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
@@ -46,37 +41,24 @@ pipeline {
 
    stages {
 
-       stage('\u2776 Workspace') {
-        agent any
-        steps {
-              echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
-              script{
-                    def manager = "my manager" // 
-                    def workspace = manager.build.getEnvVars()["WORKSPACE"]
-                    echo " workspace - ${env.WORKSPACE}"
-              }
-          
-          }//steps
-       }//stage
-    
        stage('\u2777 External Groovy') {
         agent any
           steps {
            echo "Calling external Method groovy"
            script {
-             // Load file from the current directory:
-               def externalMethod = load("**/groovy/externalMethod.groovy")
-               
-               echo "externalmethod groovy script invocation successfull"
-               externalMethod.lookAtThis("Steve")
+                    // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
+                    def externalMethod = load("**/externalMethod.groovy")
 
-               echo "Calling external Call groovy"
+                    // Call the method we defined in externalMethod.
+                    externalMethod.lookAtThis("Steve")
 
-               def externalCall = load("**/groovy/externalCall.groovy")
+                    // Now load 'externalCall.groovy'.
+                    def externalCall = load("**/externalCall.groovy")
 
-               echo "externalcall groovy script invocation successfull"
-               externalCall("Steve")
-           }
+                    // We can just run it with "externalCall(...)" since it has a call method.
+                    externalCall("Steve")
+
+            }//script
           }//steps
         }//stage
 
@@ -104,5 +86,9 @@ pipeline {
  //              }//withcredentials
           }//steps
         }//stage
+       
+        stage('\u2780 Cleanup workspace'){
+             deleteDir()
+        }//stage
    }//stages
 }//pipeline
