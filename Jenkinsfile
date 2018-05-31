@@ -86,11 +86,5 @@ pipeline {
  //              }//withcredentials
           }//steps
         }//stage
-       
-      //  stage('\u2780 Cleanup workspace'){
-      //   steps {
-      //      deleteDir()
-      //    }
-      //  }//stage
    }//stages
 }//pipeline
