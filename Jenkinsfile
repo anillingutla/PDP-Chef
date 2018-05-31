@@ -88,7 +88,9 @@ pipeline {
         }//stage
        
         stage('\u2780 Cleanup workspace'){
+          steps {
              deleteDir()
-        }//stage
+          }
+        }//stage
    }//stages
 }//pipeline
