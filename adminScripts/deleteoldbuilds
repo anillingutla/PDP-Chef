@@ -1,0 +1,15 @@
+
+MAX_BUILDS = 20
+
+for (job in Jenkins.instance.items) {
+  if(job instanceof jenkins.branch.MultiBranchProject) {
+    job = job.getJob("master")
+    def recent = job.builds.limit(MAX_BUILDS)
+    for (build in job.builds) {
+      if (!recent.contains(build)) {
+        println "Preparing to delete: " + build
+        // build.delete()
+      }
+    }
+  }
+}
