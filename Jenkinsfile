@@ -46,11 +46,15 @@ pipeline {
           steps {
            echo "Calling external Method groovy"
            script {
+             
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
                     def externalMethod = load("groovy/externalMethod.groovy")
-
+                     echo "After Calling external Method groovy"
+  
                     // Call the method we defined in externalMethod.
                     externalMethod.lookAtThis("Steve")
+
+                    echo " Calling external call groovy"
 
                     // Now load 'externalCall.groovy'.
                     def externalCall = load("groovy/externalCall.groovy")
