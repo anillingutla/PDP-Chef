@@ -49,9 +49,6 @@ pipeline {
           steps {
            echo "Calling external Method groovy"
            script {
-                    // Git checkout before load source the file
-                    checkout scm
-
                     // To know files are checked out or not
                     sh '''
                         ls -lhrt
@@ -59,6 +56,8 @@ pipeline {
 
                     def rootDir = pwd()
                     println("Current Directory: " + rootDir)
+             
+                    jenkins = Jenkins.instance
              
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
                     def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
