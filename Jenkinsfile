@@ -41,6 +41,15 @@ pipeline {
 //    string(description: 'Please select a cookbook to promote', name: 'cookbook', defaultValue: 'ford_windows')
 //  }
  
+   node {
+         echo "Calling external Method groovy"
+         // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
+        def externalMethod = jenkins.load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
+         echo "After Calling external Method groovy"
+        // Call the method we defined in externalMethod.
+         externalMethod.lookAtThis("Steve")
+   }
+   
 
    stages {
             
@@ -48,7 +57,7 @@ pipeline {
         agent any
           steps {
            echo "Calling external Method groovy"
-//           script {
+           script {
                     jenkins = Jenkins.instance 
                     // To know files are checked out or not
                     sh '''
@@ -73,7 +82,7 @@ pipeline {
                     // We can just run it with "externalCall(...)" since it has a call method.
                     externalCall("Steve")
 
- //           }//script
+            }//script
           }//steps
         }//stage
 
