@@ -48,18 +48,10 @@ pipeline {
           steps {
            echo "Calling external Method groovy"
            script {
-                    def jenkins = Jenkins.instance 
-                    // To know files are checked out or not
-                    sh '''
-                        ls -lhrt
-                    '''
-
-                    def rootDir = pwd()
-                    println("Current Directory: " + rootDir)
-              
+           
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-                    def externalMethod = jenkins.load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
-                     echo "After Calling external Method groovy"
+                    def externalMethod = load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
+                    echo "After Calling external Method groovy"
   
                     // Call the method we defined in externalMethod.
                     externalMethod.lookAtThis("Steve")
@@ -67,7 +59,7 @@ pipeline {
                     echo " Calling external call groovy"
 
                     // Now load 'externalCall.groovy'.
-                    def externalCall = jenkins.load("${rootDir}/$GROOVY_PATH/externalCall.groovy")
+                    def externalCall = load("${rootDir}/$GROOVY_PATH/externalCall.groovy")
 
                     // We can just run it with "externalCall(...)" since it has a call method.
                     externalCall("Steve")
