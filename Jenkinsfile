@@ -15,7 +15,6 @@ tokens = "${env.JOB_NAME}".tokenize('/')
 repo = tokens[0]
 branch = tokens[1]
 echo 'repo/branch=' + repo +'/'+ branch
-jenkins = Jenkins.instance
    
 pipeline {
   agent any
@@ -50,6 +49,7 @@ pipeline {
           steps {
            echo "Calling external Method groovy"
            script {
+                    jenkins = Jenkins.instance 
                     // To know files are checked out or not
                     sh '''
                         ls -lhrt
