@@ -1,4 +1,5 @@
 #!/usr/bin/env groovy
+
 import jenkins.model.*
 import hudson.model.*
 import jenkins.*
@@ -14,23 +15,6 @@ tokens = "${env.JOB_NAME}".tokenize('/')
 repo = tokens[0]
 branch = tokens[1]
 echo 'repo/branch=' + repo +'/'+ branch
-
-
- // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-  def externalMethod = Jenkins.instance.load("$GROOVY_PATH/externalMethod.groovy")
-  echo "After Calling external Method groovy"
-
-  // Call the method we defined in externalMethod.
-  externalMethod.lookAtThis("Steve")
-
-  echo " Calling external call groovy"
-
-  // Now load 'externalCall.groovy'.
-  def externalCall = Jenkins.instance.load("$GROOVY_PATH/externalCall.groovy")
-
-  // We can just run it with "externalCall(...)" since it has a call method.
-  externalCall("Steve")
-
 
 pipeline {
   agent any
@@ -52,6 +36,11 @@ pipeline {
     MAX_BUILDS ='10'
   }
  
+ /* Only keep the 10 most recent builds. */
+ properties([[$class: 'BuildDiscarderProperty',
+             strategy: [$class: 'LogRotator', numToKeepStr: '10']]])
+
+ 
 //  parameters {
 //    string(description: 'Please select an environment to promote to', name: 'env', defaultValue: 'qa')
 //    string(description: 'Please select a cookbook to promote', name: 'cookbook', defaultValue: 'ford_windows')
@@ -66,19 +55,15 @@ pipeline {
            script {
            
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-                    //def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
-                    //echo "After Calling external Method groovy"
-  
+                    def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
+                    echo "After Calling external Method groovy"
                     // Call the method we defined in externalMethod.
-                    //externalMethod.lookAtThis("Steve")
-
+                    externalMethod.lookAtThis("Steve")
                     echo " Calling external call groovy"
-
                     // Now load 'externalCall.groovy'.
-                    //def externalCall = load("$GROOVY_PATH/externalCall.groovy")
-
+                    def externalCall = load("$GROOVY_PATH/externalCall.groovy")
                     // We can just run it with "externalCall(...)" since it has a call method.
-                    //externalCall("Steve")
+                    externalCall("Steve")
 
             }//script
           }//steps
