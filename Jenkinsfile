@@ -48,7 +48,7 @@ pipeline {
         agent any
           steps {
            echo "Calling external Method groovy"
-           script {
+//           script {
                     jenkins = Jenkins.instance 
                     // To know files are checked out or not
                     sh '''
@@ -73,7 +73,7 @@ pipeline {
                     // We can just run it with "externalCall(...)" since it has a call method.
                     externalCall("Steve")
 
-            }//script
+ //           }//script
           }//steps
         }//stage
 
