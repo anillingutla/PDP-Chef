@@ -43,7 +43,9 @@ pipeline {
  
 
    stages {
-
+        
+      jenkins = Jenkins.instance
+     
        stage('\u2777 External Groovy') {
         agent any
           steps {
@@ -56,11 +58,9 @@ pipeline {
 
                     def rootDir = pwd()
                     println("Current Directory: " + rootDir)
-             
-                    //jenkins = Jenkins.instance
-             
+              
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-                    def externalMethod = load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
+                    def externalMethod = jenkins.load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
                      echo "After Calling external Method groovy"
   
                     // Call the method we defined in externalMethod.
@@ -69,7 +69,7 @@ pipeline {
                     echo " Calling external call groovy"
 
                     // Now load 'externalCall.groovy'.
-                    def externalCall = load("${rootDir}/$GROOVY_PATH/externalCall.groovy")
+                    def externalCall = jenkins.load("${rootDir}/$GROOVY_PATH/externalCall.groovy")
 
                     // We can just run it with "externalCall(...)" since it has a call method.
                     externalCall("Steve")
