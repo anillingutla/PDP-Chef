@@ -48,7 +48,7 @@ pipeline {
           steps {
            echo "Calling external Method groovy"
            script {
-                    jenkins = Jenkins.instance 
+                    def jenkins = Jenkins.instance 
                     // To know files are checked out or not
                     sh '''
                         ls -lhrt
