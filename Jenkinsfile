@@ -1,6 +1,4 @@
 #!/usr/bin/env groovy
-
-import com.cloudbees.groovy.cps.NonCPS
 import jenkins.model.*
 import hudson.model.*
 import jenkins.*
@@ -17,7 +15,7 @@ repo = tokens[0]
 branch = tokens[1]
 echo 'repo/branch=' + repo +'/'+ branch
 
-@NonCPS
+
  // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
   def externalMethod = Jenkins.instance.load("$GROOVY_PATH/externalMethod.groovy")
   echo "After Calling external Method groovy"
