@@ -57,7 +57,7 @@ pipeline {
                     def rootDir = pwd()
                     println("Current Directory: " + rootDir)
              
-                    jenkins = Jenkins.instance
+                    //jenkins = Jenkins.instance
              
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
                     def externalMethod = load("${rootDir}/$GROOVY_PATH/externalMethod.groovy")
