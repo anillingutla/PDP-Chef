@@ -15,7 +15,8 @@ tokens = "${env.JOB_NAME}".tokenize('/')
 repo = tokens[0]
 branch = tokens[1]
 echo 'repo/branch=' + repo +'/'+ branch
-
+jenkins = Jenkins.instance
+   
 pipeline {
   agent any
  
@@ -43,9 +44,7 @@ pipeline {
  
 
    stages {
-        
-      jenkins = Jenkins.instance
-     
+            
        stage('\u2777 External Groovy') {
         agent any
           steps {
