@@ -49,7 +49,6 @@ pipeline {
        stage('\u2777 External Groovy') {
         agent any
           steps {
-           echo "Calling external Method groovy"
            script {
            
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
