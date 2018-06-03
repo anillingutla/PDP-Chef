@@ -55,7 +55,7 @@ pipeline {
                    // def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
                     echo "Calling external Method groovy"
                     // Call the method we defined in externalMethod.
-                    externalMethod.lookAtThis("Steve")
+                    externalMethod("Steve")
                     echo " Calling external call groovy"
                     // Now load 'externalCall.groovy'.
                     //def externalCall = load("$GROOVY_PATH/externalCall.groovy")
