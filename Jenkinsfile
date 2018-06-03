@@ -51,17 +51,17 @@ pipeline {
         agent any
           steps {
            //script {
-                    //library 'my-shared-library@dev'
+                    library 'my-shared-library@dev'
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
                    // def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
                     echo "Calling external Method groovy"
                     // Call the method we defined in externalMethod.
-                    library('my-shared-library').var.externalMethod("Steve")
+                    var.externalMethod("Steve")
                     echo " Calling external call groovy"
                     // Now load 'externalCall.groovy'.
                     //def externalCall = load("$GROOVY_PATH/externalCall.groovy")
                     // We can just run it with "externalCall(...)" since it has a call method.
-                    library('my-shared-library').var.externalCall("Steve")
+                    var.externalCall("Steve")
 
             //}//script
           }//steps
