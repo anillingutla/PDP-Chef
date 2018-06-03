@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('my-shared-library@master') _
+@Library('my-shared-library') _
 
 import jenkins.model.*
 import hudson.model.*
@@ -33,8 +33,10 @@ pipeline {
   }
  
  /* Only keep the 10 most recent builds. */
- properties([[$class: 'BuildDiscarderProperty',
-             strategy: [$class: 'LogRotator', numToKeepStr: '10']]])
+  options {
+      buildDiscarder(logRotator(numToKeepStr:'5'))
+      disableConcurrentBuilds()
+  }
 
  
 //  parameters {
