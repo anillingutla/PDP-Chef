@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+@Library('my-shared-library@1.0') _
+
 import jenkins.model.*
 import hudson.model.*
 import jenkins.*
@@ -9,12 +11,6 @@ def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
 def githubCredentials = "ford-github"
 def githubSshCredentials = "chef-automate-ssh"
-
-//retrieve branch name
-tokens = "${env.JOB_NAME}".tokenize('/')
-repo = tokens[0]
-branch = tokens[1]
-echo 'repo/branch=' + repo +'/'+ branch
 
 pipeline {
   agent any
@@ -55,13 +51,13 @@ pipeline {
            script {
            
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-                    def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
-                    echo "After Calling external Method groovy"
+                   // def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
+                    echo "Calling external Method groovy"
                     // Call the method we defined in externalMethod.
                     externalMethod.lookAtThis("Steve")
                     echo " Calling external call groovy"
                     // Now load 'externalCall.groovy'.
-                    def externalCall = load("$GROOVY_PATH/externalCall.groovy")
+                    //def externalCall = load("$GROOVY_PATH/externalCall.groovy")
                     // We can just run it with "externalCall(...)" since it has a call method.
                     externalCall("Steve")
 
