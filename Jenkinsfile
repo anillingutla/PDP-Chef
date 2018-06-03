@@ -94,4 +94,16 @@ pipeline {
           }//steps
         }//stage
    }//stages
+   post {
+    always {
+      deleteDir() //cleanup directory
+    }
+    success {
+      mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
+    }
+    failure {
+      mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
+    }
+  } 
+  
 }//pipeline
