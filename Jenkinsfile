@@ -2,6 +2,7 @@
 
 @Library('my-shared-library@dev') _
 
+import var.*
 import jenkins.model.*
 import hudson.model.*
 import jenkins.*
