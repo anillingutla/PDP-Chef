@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('my-shared-library@1.0') _
+@Library('my-shared-library@master') _
 
 import jenkins.model.*
 import hudson.model.*
