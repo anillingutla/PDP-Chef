@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('my-shared-library@dev') _
+//@Library('my-shared-library@dev') _
 
 import var.*
 import jenkins.model.*
@@ -51,7 +51,7 @@ pipeline {
         agent any
           steps {
            script {
-           
+                    library 'my-shared-library@dev'
                     // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
                    // def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
                     echo "Calling external Method groovy"
