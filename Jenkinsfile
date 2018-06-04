@@ -14,30 +14,34 @@ def cookbooksChanged = false
 pipeline {
   agent any
   
-  environment {
-    // Chef Automate information
-    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-    AUTOMATE_ENTERPRISE = 'ford'
-    AUTOMATE_ORG = 'POC'
-    AUTOMATE_PROJECT = 'ford_rdc_environments'
-    AUTOMATE_PIPELINE = 'master'
 
-    // GitHub Configuration
-    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-    GIT_PROTOCOL = 'ssh://'
-    GIT_COMMAND = 'delivery review'
+  library 'my-shared-library@dev'
+  
+  if (isValidDeployBranch()) {
+      environment {
+        // Chef Automate information
+        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+        AUTOMATE_ENTERPRISE = 'ford'
+        AUTOMATE_ORG = 'POC'
+        AUTOMATE_PROJECT = 'ford_rdc_environments'
+        AUTOMATE_PIPELINE = 'master'
 
-    GROOVY_PATH ='groovy'
-    MAX_BUILDS ='10'
+        // GitHub Configuration
+        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+        GIT_PROTOCOL = 'ssh://'
+        GIT_COMMAND = 'delivery review'
+
+        GROOVY_PATH ='groovy'
+        MAX_BUILDS ='10'
+      }
+
+      /* Only keep the 10 most recent builds. */
+      options {
+          buildDiscarder(logRotator(numToKeepStr:'5'))
+          disableConcurrentBuilds()
+          timeout(time: 15, unit: 'MINUTES')
+      }
   }
-
-  /* Only keep the 10 most recent builds. */
-  options {
-      buildDiscarder(logRotator(numToKeepStr:'5'))
-      disableConcurrentBuilds()
-      timeout(time: 15, unit: 'MINUTES')
-  }
-
  
 //  parameters {
 //    string(description: 'Please select an environment to promote to', name: 'env', defaultValue: 'qa')
