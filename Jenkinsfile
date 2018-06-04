@@ -55,11 +55,15 @@ pipeline {
     
                 library 'my-shared-library@dev'
                 deleteDir()
-                log.info ("Checking Master for Changes")
             
-         //       script {
+               script {
+                    
+                    log.info ("Checking Master for Changes")
                     sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                     sh "git fetch --no-tags"
+                    
+                    echo " after shell script "
+                 
                     List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
                       
                     for (int i = 0; i < sourceChanged.size(); i++) {
@@ -67,7 +71,7 @@ pipeline {
                             areCookbooksChanged = true
                         }
                     }
-           //      }    
+                }    
                 if (areCookbooksChanged)
                   log.info ("changes Identified")
                 else
