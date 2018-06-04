@@ -56,10 +56,7 @@ pipeline {
                 deleteDir()
                 //branch name from Jenkins environment variables
                 echo "My branch is: ${env.BRANCH_NAME}"
-
-                def flavor = flavor(env.BRANCH_NAME)
-                echo "Building flavor ${flavor}"
-
+      
                 script {
 
                     log.info ("Checking Master for Changes")
