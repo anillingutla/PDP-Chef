@@ -13,34 +13,29 @@ def cookbooksChanged = false
   
 pipeline {
   agent any
-  
+    
+  environment {
+    // Chef Automate information
+    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+    AUTOMATE_ENTERPRISE = 'ford'
+    AUTOMATE_ORG = 'POC'
+    AUTOMATE_PROJECT = 'ford_rdc_environments'
+    AUTOMATE_PIPELINE = 'master'
 
-  library 'my-shared-library@dev'
-  
-  if (isValidDeployBranch()) {
-      environment {
-        // Chef Automate information
-        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-        AUTOMATE_ENTERPRISE = 'ford'
-        AUTOMATE_ORG = 'POC'
-        AUTOMATE_PROJECT = 'ford_rdc_environments'
-        AUTOMATE_PIPELINE = 'master'
+    // GitHub Configuration
+    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+    GIT_PROTOCOL = 'ssh://'
+    GIT_COMMAND = 'delivery review'
 
-        // GitHub Configuration
-        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-        GIT_PROTOCOL = 'ssh://'
-        GIT_COMMAND = 'delivery review'
+    GROOVY_PATH ='groovy'
+    MAX_BUILDS ='10'
+  }
 
-        GROOVY_PATH ='groovy'
-        MAX_BUILDS ='10'
-      }
-
-      /* Only keep the 10 most recent builds. */
-      options {
-          buildDiscarder(logRotator(numToKeepStr:'5'))
-          disableConcurrentBuilds()
-          timeout(time: 15, unit: 'MINUTES')
-      }
+  /* Only keep the 10 most recent builds. */
+  options {
+      buildDiscarder(logRotator(numToKeepStr:'5'))
+      disableConcurrentBuilds()
+      timeout(time: 15, unit: 'MINUTES')
   }
  
 //  parameters {
@@ -58,29 +53,32 @@ pipeline {
                 echo "Build triggered via branch: ${env.NODE_NAME}"
     
                 library 'my-shared-library@dev'
-                deleteDir()
-            
-               script {
-                    
-                    log.info ("Checking Master for Changes")
-                    sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
-                    sh "git fetch --no-tags"
-                    
-                    echo " after shell script "
-                 
-                    List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
-                      
-                    for (int i = 0; i < sourceChanged.size(); i++) {
-                        if (sourceChanged[i].contains("cookbook_list.yml")) {
-                            cookbooksChanged = true
-                        }
-                    }
-                    if (cookbooksChanged) {
-                          log.info ("changes Identified")
-                    }else{
-                          log.info ("NO changes Identified")
-                    }
-               }    
+                if (isValidDeployBranch()) {
+
+                     deleteDir()
+
+                     script {
+
+                          log.info ("Checking Master for Changes")
+                          sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                          sh "git fetch --no-tags"
+
+                          echo " after shell script "
+
+                          List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
+
+                          for (int i = 0; i < sourceChanged.size(); i++) {
+                              if (sourceChanged[i].contains("cookbook_list.yml")) {
+                                  cookbooksChanged = true
+                              }
+                          }
+                          if (cookbooksChanged) {
+                                log.info ("changes Identified")
+                          }else{
+                                log.info ("NO changes Identified")
+                          }
+                     }//script   
+               } //valid branch   
          }//steps
         }//stage    
      
