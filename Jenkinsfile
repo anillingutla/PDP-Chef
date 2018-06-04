@@ -16,25 +16,26 @@ pipeline {
   
   echo "Build triggered via branch: ${env.BRANCH_NAME}"
   
-  environment {
-    // Chef Automate information
-    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-    AUTOMATE_ENTERPRISE = 'ford'
-    AUTOMATE_ORG = 'POC'
-    AUTOMATE_PROJECT = 'ford_rdc_environments'
-    AUTOMATE_PIPELINE = 'master'
+  echo "NODE_NAME = ${env.NODE_NAME}"
 
-    // GitHub Configuration
-    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-    GIT_PROTOCOL = 'ssh://'
-    GIT_COMMAND = 'delivery review'
+  if (env.NODE_NAME == 'master'){
+ 
+      environment {
+        // Chef Automate information
+        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+        AUTOMATE_ENTERPRISE = 'ford'
+        AUTOMATE_ORG = 'POC'
+        AUTOMATE_PROJECT = 'ford_rdc_environments'
+        AUTOMATE_PIPELINE = 'master'
 
-    GROOVY_PATH ='groovy'
-    MAX_BUILDS ='10'
-  }
-  
-  if (env.BRANCH_NAME == 'master'){
-      echo " Its master branch ............................................... "
+        // GitHub Configuration
+        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+        GIT_PROTOCOL = 'ssh://'
+        GIT_COMMAND = 'delivery review'
+
+        GROOVY_PATH ='groovy'
+        MAX_BUILDS ='10'
+      }
   }
   
  /* Only keep the 10 most recent builds. */
@@ -61,7 +62,7 @@ pipeline {
                 library 'my-shared-library@dev'
                 deleteDir()
                 log.info ("Checking Master for Changes")
-                script {
+     //           script {
                     sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                     sh "git fetch --no-tags"
                     List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.BRANCH_NAME}").split()
@@ -71,7 +72,7 @@ pipeline {
                             areCookbooksChanged = true
                         }
                     }
-                 }    
+     //            }    
                 if (areCookbooksChanged == true)
                   log.info ("changes Identified")
                 else
