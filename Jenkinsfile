@@ -54,30 +54,33 @@ pipeline {
     
                 library 'my-shared-library@dev'
                 deleteDir()
+                //branch name from Jenkins environment variables
+                echo "My branch is: ${env.BRANCH_NAME}"
+
+                def flavor = flavor(env.BRANCH_NAME)
+                echo "Building flavor ${flavor}"
 
                 script {
-                     if (isValidDeployBranch()) {
 
-                          log.info ("Checking Master for Changes")
-                          sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
-                          sh "git fetch --no-tags"
+                    log.info ("Checking Master for Changes")
+                    sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                    sh "git fetch --no-tags"
 
-                          echo " after shell script "
+                    echo " after shell script "
 
-                          List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
+                    List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
 
-                          for (int i = 0; i < sourceChanged.size(); i++) {
-                              if (sourceChanged[i].contains("cookbook_list.yml")) {
-                                  cookbooksChanged = true
-                              }
-                          }
-                          if (cookbooksChanged) {
-                                log.info ("changes Identified")
-                          }else{
-                                log.info ("NO changes Identified")
-                          }
-                      }//valid brnch   
-                } //script   
+                    for (int i = 0; i < sourceChanged.size(); i++) {
+                        if (sourceChanged[i].contains("cookbook_list.yml")) {
+                            cookbooksChanged = true
+                        }
+                    }
+                    if (cookbooksChanged) {
+                          log.info ("changes Identified")
+                    }else{
+                          log.info ("NO changes Identified")
+                    }
+               } //script   
             }//steps
         }//stage    
      
