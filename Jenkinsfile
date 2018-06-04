@@ -2,37 +2,39 @@
 
 @Library('my-shared-library@dev') _
 
-import var.*
 import jenkins.model.*
-import hudson.model.*
 import jenkins.*
-import hudson.*
 
 def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
 def githubCredentials = "ford-github"
 def githubSshCredentials = "chef-automate-ssh"
-
+def areCookbooksChanged = false
+  
 pipeline {
   agent any
- 
-  environment {
-    // Chef Automate information
-    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-    AUTOMATE_ENTERPRISE = 'ford'
-    AUTOMATE_ORG = 'POC'
-    AUTOMATE_PROJECT = 'ford_rdc_environments'
-    AUTOMATE_PIPELINE = 'master'
- 
-    // GitHub Configuration
-    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-    GIT_PROTOCOL = 'ssh://'
-    GIT_COMMAND = 'delivery review'
-    
-    GROOVY_PATH ='groovy'
-    MAX_BUILDS ='10'
+  
+  echo "Build triggered via branch: ${env.BRANCH_NAME}"
+  
+  if (env.BRANCH_NAME == 'master'){
+      environment {
+        // Chef Automate information
+        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+        AUTOMATE_ENTERPRISE = 'ford'
+        AUTOMATE_ORG = 'POC'
+        AUTOMATE_PROJECT = 'ford_rdc_environments'
+        AUTOMATE_PIPELINE = 'master'
+
+        // GitHub Configuration
+        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+        GIT_PROTOCOL = 'ssh://'
+        GIT_COMMAND = 'delivery review'
+
+        GROOVY_PATH ='groovy'
+        MAX_BUILDS ='10'
+      }
   }
- 
+  
  /* Only keep the 10 most recent builds. */
   options {
       buildDiscarder(logRotator(numToKeepStr:'5'))
@@ -53,15 +55,24 @@ pipeline {
             label 'master'
           }
           steps {
-                  
-                    deleteDir()
-                    //library 'my-shared-library@dev'
-                  
-                    log.info ("Calling checkForChanges groovy")
-                  
-                    def val = checkForChanges()
- 
-                    log.info ("changes Identified")
+            
+                deleteDir()
+                log.info ("Checking Master for Changes")
+                script {
+                    sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                    sh "git fetch --no-tags"
+                    List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.BRANCH_NAME}").split()
+                      
+                    for (int i = 0; i < sourceChanged.size(); i++) {
+                        if (sourceChanged[i].contains("cookbook_list.yml")) {
+                            areCookbooksChanged = true
+                        }
+                    }
+                 }    
+                if (areCookbooksChanged == true)
+                  log.info ("changes Identified")
+                else
+                  log.info ("NO changes Identified")
             
           }//steps
         }//stage    
