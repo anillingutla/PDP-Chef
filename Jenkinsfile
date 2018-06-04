@@ -72,11 +72,11 @@ pipeline {
                         }
                     }
                 }    
-                if (areCookbooksChanged)
+            if (areCookbooksChanged) {
                   log.info ("changes Identified")
-                else
+            }else{
                   log.info ("NO changes Identified")
-            
+            }
           }//steps
         }//stage    
      
