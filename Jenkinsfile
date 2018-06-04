@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-//@Library('my-shared-library@dev') _
+@Library('my-shared-library@dev') _
 
 import var.*
 import jenkins.model.*
@@ -37,6 +37,7 @@ pipeline {
   options {
       buildDiscarder(logRotator(numToKeepStr:'5'))
       disableConcurrentBuilds()
+      timeout(time: 15, unit: 'MINUTES')
   }
 
  
@@ -46,24 +47,35 @@ pipeline {
 //  }
 
    stages {
-            
-       stage('\u2777 External Groovy') {
-        agent any
-          steps {
-           //script {
-                    library 'my-shared-library@dev'
-                    // Load the file 'externalMethod.groovy' from the current directory, into a variable called "externalMethod".
-                   // def externalMethod = load("$GROOVY_PATH/externalMethod.groovy")
-                    echo "Calling external Method groovy"
-                    // Call the method we defined in externalMethod.
-                    externalMethod("Steve")
-                    echo " Calling external call groovy"
-                    // Now load 'externalCall.groovy'.
-                    //def externalCall = load("$GROOVY_PATH/externalCall.groovy")
-                    // We can just run it with "externalCall(...)" since it has a call method.
-                    externalCall("Steve")
 
-            //}//script
+      stage('\u2776 Check for changes in Repo') {
+          agent {
+            label 'master'
+          }
+          steps {
+                  
+                    deleteDir()
+                    //library 'my-shared-library@dev'
+                  
+                    log.info ("Calling checkForChanges groovy")
+                  
+                    def val = checkForChanges()
+ 
+                    log.info ("changes Identified")
+            
+          }//steps
+        }//stage    
+     
+       stage('\u2777 External Groovy') {
+          agent {
+            label 'master'
+          }
+          steps {
+            
+                    deleteDir()
+                    //library 'my-shared-library@dev'
+                    echo "Calling external Method groovy"
+                    externalMethod("Steve")
           }//steps
         }//stage
 
