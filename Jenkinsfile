@@ -9,7 +9,7 @@ def environmentRepoCredentials = "chef-environments"
 def chefAutomateCredentials = "chef-automate"
 def githubCredentials = "ford-github"
 def githubSshCredentials = "chef-automate-ssh"
-def areCookbooksChanged = false
+def cookbooksChanged = false
   
 pipeline {
   agent any
@@ -68,16 +68,16 @@ pipeline {
                       
                     for (int i = 0; i < sourceChanged.size(); i++) {
                         if (sourceChanged[i].contains("cookbook_list.yml")) {
-                            areCookbooksChanged = true
+                            cookbooksChanged = true
                         }
                     }
-                }    
-            if (areCookbooksChanged) {
-                  log.info ("changes Identified")
-            }else{
-                  log.info ("NO changes Identified")
-            }
-          }//steps
+                    if (cookbooksChanged) {
+                          log.info ("changes Identified")
+                    }else{
+                          log.info ("NO changes Identified")
+                    }
+               }    
+         }//steps
         }//stage    
      
        stage('\u2777 External Groovy') {
