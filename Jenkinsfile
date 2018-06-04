@@ -53,11 +53,10 @@ pipeline {
                 echo "Build triggered via branch: ${env.NODE_NAME}"
     
                 library 'my-shared-library@dev'
-                if (isValidDeployBranch()) {
+                deleteDir()
 
-                     deleteDir()
-
-                     script {
+                script {
+                     if (isValidDeployBranch()) {
 
                           log.info ("Checking Master for Changes")
                           sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
@@ -77,9 +76,9 @@ pipeline {
                           }else{
                                 log.info ("NO changes Identified")
                           }
-                     }//script   
-               } //valid branch   
-         }//steps
+                      }//valid brnch   
+                } //script   
+            }//steps
         }//stage    
      
        stage('\u2777 External Groovy') {
