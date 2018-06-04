@@ -1,0 +1,4 @@
+---
+cookbook_list:
+  -  ford_chef_hello_world (0.20)
+...
