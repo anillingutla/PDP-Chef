@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-@Library('my-shared-library@dev') _
+//@Library('my-shared-library@dev') _
 
 import jenkins.model.*
 import jenkins.*
@@ -16,23 +16,25 @@ pipeline {
   
   echo "Build triggered via branch: ${env.BRANCH_NAME}"
   
+  environment {
+    // Chef Automate information
+    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+    AUTOMATE_ENTERPRISE = 'ford'
+    AUTOMATE_ORG = 'POC'
+    AUTOMATE_PROJECT = 'ford_rdc_environments'
+    AUTOMATE_PIPELINE = 'master'
+
+    // GitHub Configuration
+    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+    GIT_PROTOCOL = 'ssh://'
+    GIT_COMMAND = 'delivery review'
+
+    GROOVY_PATH ='groovy'
+    MAX_BUILDS ='10'
+  }
+  
   if (env.BRANCH_NAME == 'master'){
-      environment {
-        // Chef Automate information
-        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-        AUTOMATE_ENTERPRISE = 'ford'
-        AUTOMATE_ORG = 'POC'
-        AUTOMATE_PROJECT = 'ford_rdc_environments'
-        AUTOMATE_PIPELINE = 'master'
-
-        // GitHub Configuration
-        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-        GIT_PROTOCOL = 'ssh://'
-        GIT_COMMAND = 'delivery review'
-
-        GROOVY_PATH ='groovy'
-        MAX_BUILDS ='10'
-      }
+      echo " Its master branch ............................................... "
   }
   
  /* Only keep the 10 most recent builds. */
@@ -55,7 +57,8 @@ pipeline {
             label 'master'
           }
           steps {
-            
+                  
+                library 'my-shared-library@dev'
                 deleteDir()
                 log.info ("Checking Master for Changes")
                 script {
@@ -84,7 +87,7 @@ pipeline {
           steps {
             
                     deleteDir()
-                    //library 'my-shared-library@dev'
+                    library 'my-shared-library@dev'
                     echo "Calling external Method groovy"
                     externalMethod("Steve")
           }//steps
