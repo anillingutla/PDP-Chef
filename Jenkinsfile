@@ -14,31 +14,24 @@ def areCookbooksChanged = false
 pipeline {
   agent any
   
-  echo "Build triggered via branch: ${env.BRANCH_NAME}"
-  
-  echo "NODE_NAME = ${env.NODE_NAME}"
+  environment {
+    // Chef Automate information
+    AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
+    AUTOMATE_ENTERPRISE = 'ford'
+    AUTOMATE_ORG = 'POC'
+    AUTOMATE_PROJECT = 'ford_rdc_environments'
+    AUTOMATE_PIPELINE = 'master'
 
-  if (env.NODE_NAME == 'master'){
- 
-      environment {
-        // Chef Automate information
-        AUTOMATE_URL = 'https://chef-val-wfl.hplab1.ford.com'
-        AUTOMATE_ENTERPRISE = 'ford'
-        AUTOMATE_ORG = 'POC'
-        AUTOMATE_PROJECT = 'ford_rdc_environments'
-        AUTOMATE_PIPELINE = 'master'
+    // GitHub Configuration
+    GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
+    GIT_PROTOCOL = 'ssh://'
+    GIT_COMMAND = 'delivery review'
 
-        // GitHub Configuration
-        GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
-        GIT_PROTOCOL = 'ssh://'
-        GIT_COMMAND = 'delivery review'
-
-        GROOVY_PATH ='groovy'
-        MAX_BUILDS ='10'
-      }
+    GROOVY_PATH ='groovy'
+    MAX_BUILDS ='10'
   }
-  
- /* Only keep the 10 most recent builds. */
+
+  /* Only keep the 10 most recent builds. */
   options {
       buildDiscarder(logRotator(numToKeepStr:'5'))
       disableConcurrentBuilds()
@@ -58,7 +51,8 @@ pipeline {
             label 'master'
           }
           steps {
-                  
+                echo "Build triggered via branch: ${env.NODE_NAME}"
+    
                 library 'my-shared-library@dev'
                 deleteDir()
                 log.info ("Checking Master for Changes")
