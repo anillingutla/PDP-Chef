@@ -49,9 +49,9 @@ pipeline {
           steps {
                 echo "Build triggered via branch: ${env.NODE_NAME}"
     
-                deleteDir()
                 //branch name from Jenkins environment variables
                 echo "My branch is: ${env.BRANCH_NAME}"
+                echo "My GIT_URL is: ${env.GIT_URL}"
       
                 script {
                   if (env.BRANCH_NAME != "master") {
