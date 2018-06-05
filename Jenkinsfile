@@ -83,7 +83,7 @@ pipeline {
           }
           steps {
                     //TEST COMMON UTILITIES
-                    echo "JENKINS UID :" +  load("common.groovy").getJenkinsUid ()
+                    //echo "JENKINS UID :" +  load("common.groovy").getJenkinsUid ()
                     echo "Calling external Method groovy"
                     externalMethod("Steve")
           }//steps
