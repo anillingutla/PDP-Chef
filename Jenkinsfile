@@ -52,7 +52,6 @@ pipeline {
                 //branch name from Jenkins environment variables
                 echo "My branch is: ${env.BRANCH_NAME}"
                 echo "My GIT_URL is: ${env.GIT_URL}"
-      
                 script {
                   if (env.BRANCH_NAME != "master") {
                         log.info ("Checking Master for Changes")
@@ -83,9 +82,8 @@ pipeline {
             label 'master'
           }
           steps {
-            
-                    deleteDir()
-                    //library 'my-shared-library@dev'
+                    //TEST COMMON UTILITIES
+                    echo "JENKINS UID :" +  getJenkinsUid ()
                     echo "Calling external Method groovy"
                     externalMethod("Steve")
           }//steps
