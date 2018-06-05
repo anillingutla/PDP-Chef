@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-//@Library('my-shared-library@dev') _
+@Library('my-shared-library@dev') _
 
 import jenkins.model.*
 import jenkins.*
@@ -49,31 +49,31 @@ pipeline {
           steps {
                 echo "Build triggered via branch: ${env.NODE_NAME}"
     
-                library 'my-shared-library@dev'
                 deleteDir()
                 //branch name from Jenkins environment variables
                 echo "My branch is: ${env.BRANCH_NAME}"
       
                 script {
                   if (env.BRANCH_NAME != "master") {
-                      log.info ("Checking Master for Changes")
-                      sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
-                      sh "git fetch --no-tags"
-                  } 
-                  echo " after shell script "
+                        log.info ("Checking Master for Changes")
+                        sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                        sh "git fetch --no-tags"
+                        echo " after shell script "
 
-                  List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
+                        List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
 
-                  for (int i = 0; i < sourceChanged.size(); i++) {
-                      if (sourceChanged[i].contains("cookbook_list.yml")) {
-                          cookbooksChanged = true
-                      }
-                  }
-                  if (cookbooksChanged) {
-                        log.info ("changes Identified")
-                  }else{
-                        log.info ("NO changes Identified")
-                  }
+                        for (int i = 0; i < sourceChanged.size(); i++) {
+                            if (sourceChanged[i].contains("cookbook_list.yml")) {
+                                cookbooksChanged = true
+                            }
+                        }
+                    } //if master
+
+                    if (cookbooksChanged) {
+                          log.info ("changes Identified")
+                    }else{
+                          log.info ("NO changes Identified")
+                    }
                } //script   
             }//steps
         }//stage    
@@ -85,7 +85,7 @@ pipeline {
           steps {
             
                     deleteDir()
-                    library 'my-shared-library@dev'
+                    //library 'my-shared-library@dev'
                     echo "Calling external Method groovy"
                     externalMethod("Steve")
           }//steps
