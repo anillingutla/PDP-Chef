@@ -47,17 +47,17 @@ pipeline {
             label 'master'
           }
           steps {
-                echo "Build triggered via branch: ${env.NODE_NAME}"
+                log.info ("Build triggered via branch: ${env.NODE_NAME}")
     
                 //branch name from Jenkins environment variables
-                echo "My branch is: ${env.BRANCH_NAME}"
-                echo "My GIT_URL is: ${env.GIT_URL}"
+                log.info ( "My branch is: ${env.BRANCH_NAME}")
+
                 script {
                   if (env.BRANCH_NAME != "master") {
                         log.info ("Checking Master for Changes")
                         sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                         sh "git fetch --no-tags"
-                        echo " after shell script "
+                        log.info ( " after shell script ")
 
                         List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
 
@@ -69,9 +69,9 @@ pipeline {
                     } //if master
 
                     if (cookbooksChanged) {
-                          log.info ("changes Identified")
+                          log.info ("changes Identified in ${env.NODE_NAME}")
                     }else{
-                          log.info ("NO changes Identified")
+                          log.info ("NO changes Identified in ${env.NODE_NAME}")
                     }
                } //script   
             }//steps
@@ -84,14 +84,14 @@ pipeline {
           steps {
                     //TEST COMMON UTILITIES
                     //echo "JENKINS UID :" +  load("common.groovy").getJenkinsUid ()
-                    echo "Calling external Method groovy"
+                    log.info ( "Calling external Method groovy")
                     externalMethod("Steve")
           }//steps
         }//stage
 
        stage('\u2778 clone') {
           steps {
-            echo "Cloning ${GIT_URL}"
+            log.info ( "Cloning ${GIT_URL}")
  //              dir("ford_rdc_environments") {
  //                sshagent([githubSshCredentials]) {
  //                  git(url: "${GIT_PROTOCOL}${GIT_URL}", credentialsId: githubSshCredentials)
@@ -102,7 +102,7 @@ pipeline {
 
         stage('\u2779 modify') {
           steps {
-            echo "Modifying ${params.cookbook} in environments/${params.env}.json"
+            log.info ( "Modifying ${params.cookbook} in environments/${params.env}.json")
             sh 'ruby --version'
  //             withCredentials([usernamePassword(credentialsId: chefAutomateCredentials, usernameVariable: 'AUTOMATE_USER', passwordVariable: 'AUTOMATE_PASSWORD')]) {
  //                withCredentials([usernamePassword(credentialsId: githubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) {
@@ -116,13 +116,17 @@ pipeline {
    }//stages
    post {
     always {
+      log.info ( "Deleting / Clearining up the Directory" )
       deleteDir() //cleanup directory
     }
     success {
       mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
+      log.info ( "EMail sent for successfu Build" )
     }
     failure {
       mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
+      log.error ( "EMail sent for unsuccessfu Build" )
+
     }
   } 
   
