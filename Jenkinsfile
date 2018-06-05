@@ -26,9 +26,6 @@ pipeline {
     GIT_URL = 'git@github.ford.com/JBODNAR/ford_rdc_environments.git'
     GIT_PROTOCOL = 'ssh://'
     GIT_COMMAND = 'delivery review'
-
-    GROOVY_PATH ='groovy'
-    MAX_BUILDS ='10'
   }
 
   /* Only keep the 10 most recent builds. */
