@@ -52,7 +52,7 @@ pipeline {
                 //branch name from Jenkins environment variables
                 info ( "My branch is: ${env.BRANCH_NAME}")
             
-               // script {
+               script {
                   if (env.BRANCH_NAME != "master") {
                         info ("Checking Master for Changes")
                         sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
@@ -73,7 +73,7 @@ pipeline {
                     }else{
                           info ("NO changes Identified in ${env.NODE_NAME}")
                     }
-              // } //script   
+              } //script   
             }//steps
         }//stage    
      
