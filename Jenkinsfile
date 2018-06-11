@@ -48,16 +48,16 @@ pipeline {
           }
           steps {
 
-                script {
-                  log.info ("Build triggered via branch: ${env.NODE_NAME}")
-
-                  //branch name from Jenkins environment variables
-                  log.info ( "My branch is: ${env.BRANCH_NAME}")
+                info ("Build triggered via branch: ${env.NODE_NAME}")
+                //branch name from Jenkins environment variables
+                info ( "My branch is: ${env.BRANCH_NAME}")
+            
+               // script {
                   if (env.BRANCH_NAME != "master") {
-                        log.info ("Checking Master for Changes")
+                        info ("Checking Master for Changes")
                         sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                         sh "git fetch --no-tags"
-                        log.info ( " after shell script ")
+                        info ( " after shell script ")
 
                         List<String> sourceChanged = sh(returnStdout: true, script: "git diff --name-only origin/master..origin/${env.NODE_NAME}").split()
 
@@ -69,11 +69,11 @@ pipeline {
                     } //if master
 
                     if (cookbooksChanged) {
-                          log.info ("changes Identified in ${env.NODE_NAME}")
+                          info ("changes Identified in ${env.NODE_NAME}")
                     }else{
-                          log.info ("NO changes Identified in ${env.NODE_NAME}")
+                          info ("NO changes Identified in ${env.NODE_NAME}")
                     }
-               } //script   
+              // } //script   
             }//steps
         }//stage    
      
@@ -116,16 +116,16 @@ pipeline {
    }//stages
    post {
     always {
-      log.info ( "Deleting / Clearining up the Directory" )
+      info ( "Deleting / Clearining up the Directory" )
       deleteDir() //cleanup directory
     }
     success {
       mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
-      log.info ( "EMail sent for successfu Build" )
+      info ( "EMail sent for successfu Build" )
     }
     failure {
       mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
-      log.error ( "EMail sent for unsuccessfu Build" )
+      error ( "EMail sent for unsuccessfu Build" )
 
     }
   } 
