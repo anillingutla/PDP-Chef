@@ -47,12 +47,12 @@ pipeline {
             label 'master'
           }
           steps {
-                log.info ("Build triggered via branch: ${env.NODE_NAME}")
-    
-                //branch name from Jenkins environment variables
-                log.info ( "My branch is: ${env.BRANCH_NAME}")
 
                 script {
+                  log.info ("Build triggered via branch: ${env.NODE_NAME}")
+
+                  //branch name from Jenkins environment variables
+                  log.info ( "My branch is: ${env.BRANCH_NAME}")
                   if (env.BRANCH_NAME != "master") {
                         log.info ("Checking Master for Changes")
                         sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
