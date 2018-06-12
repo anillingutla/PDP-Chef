@@ -41,7 +41,6 @@ pipeline {
 //  }
 
    stages {
-      library 'my-shared-library@dev'
       stage('\u2776 Check for changes in Repo') {
           agent {
             label 'master'
@@ -114,7 +113,6 @@ pipeline {
         }//stage
    }//stages
    post {
-    library 'my-shared-library@dev' 
     always {
       echo ( "Deleting / Clearining up the Directory" )
       deleteDir() //cleanup directory
