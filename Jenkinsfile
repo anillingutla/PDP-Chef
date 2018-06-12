@@ -46,14 +46,13 @@ pipeline {
           agent {
             label 'master'
           }
-          steps {
-
-                log.info ("Build triggered via branch: ${env.NODE_NAME}")
-                //branch name from Jenkins environment variables
-                log.info ( "My branch is: ${env.BRANCH_NAME}")
-            
+          steps {            
                script {
-                  if (env.BRANCH_NAME != "master") {
+                  log.info ("Build triggered via branch: ${env.NODE_NAME}")
+                  //branch name from Jenkins environment variables
+                  log.info ( "My branch is: ${env.BRANCH_NAME}")
+
+                 if (env.BRANCH_NAME != "master") {
                         log.info ("Checking Master for Changes")
                         sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                         sh "git fetch --no-tags"
@@ -84,14 +83,14 @@ pipeline {
           steps {
                     //TEST COMMON UTILITIES
                     //echo "JENKINS UID :" +  load("common.groovy").getJenkinsUid ()
-                    log.info ( "Calling external Method groovy")
+                    echo ( "Calling external Method groovy")
                     externalMethod("Steve")
           }//steps
         }//stage
 
        stage('\u2778 clone') {
           steps {
-                log.info ( "Cloning ${GIT_URL}")
+                echo ( "Cloning ${GIT_URL}")
  //              dir("ford_rdc_environments") {
  //                sshagent([githubSshCredentials]) {
  //                  git(url: "${GIT_PROTOCOL}${GIT_URL}", credentialsId: githubSshCredentials)
@@ -102,7 +101,7 @@ pipeline {
 
         stage('\u2779 modify') {
           steps {
-            log.info ( "Modifying ${params.cookbook} in environments/${params.env}.json")
+            echo ( "Modifying ${params.cookbook} in environments/${params.env}.json")
             sh 'ruby --version'
  //             withCredentials([usernamePassword(credentialsId: chefAutomateCredentials, usernameVariable: 'AUTOMATE_USER', passwordVariable: 'AUTOMATE_PASSWORD')]) {
  //                withCredentials([usernamePassword(credentialsId: githubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) {
@@ -117,16 +116,16 @@ pipeline {
    post {
     library 'my-shared-library@dev' 
     always {
-      log.info ( "Deleting / Clearining up the Directory" )
+      echo ( "Deleting / Clearining up the Directory" )
       deleteDir() //cleanup directory
     }
     success {
       mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
-      log.info ( "EMail sent for successfu Build" )
+      echo ( "EMail sent for successfu Build" )
     }
     failure {
       mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
-      log.error ( "EMail sent for unsuccessfu Build" )
+      echo ( "EMail sent for unsuccessfu Build" )
 
     }
   } 
