@@ -101,7 +101,7 @@ pipeline {
         stage('\u2779 modify') {
           steps {
             echo ( "Modifying ${params.cookbook} in environments/${params.env}.json")
-            sh 'ruby --version'
+ //           sh 'ruby --version'
  //             withCredentials([usernamePassword(credentialsId: chefAutomateCredentials, usernameVariable: 'AUTOMATE_USER', passwordVariable: 'AUTOMATE_PASSWORD')]) {
  //                withCredentials([usernamePassword(credentialsId: githubCredentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) {
  //                  sshagent([githubSshCredentials]) {
