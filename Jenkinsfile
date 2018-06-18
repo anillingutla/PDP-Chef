@@ -118,11 +118,11 @@ pipeline {
       deleteDir() //cleanup directory
     }
     success {
-      mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
+      //mail to:"admin@admin.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build Successful."
       echo ( "EMail sent for successfu Build" )
     }
     failure {
-      mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
+      //mail to:"admin@admin.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Build Failed."
       echo ( "EMail sent for unsuccessfu Build" )
 
     }
